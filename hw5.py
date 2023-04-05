@@ -9,9 +9,9 @@ class LinearRegression:
 
     def fit(self, X: np.ndarray, y: np.array) -> None:
         """
-        Implement a fit method that uses a closed form solution to calculate coeficients and the intercept.
+        Implement a fit method that uses a closed form solution to calculate coefficients and the intercept.
         Use vectorized operations to calculate weights. Do not forget about the intercept.
-        Assign coeficients (np.array) to the self.coefs variable and intercept (float) to the self.intercept variable.
+        Assign coefficients (np.array) to the self.coefs variable and intercept (float) to the self.intercept variable.
 
         Arguments
         ---------
@@ -24,7 +24,7 @@ class LinearRegression:
 
     def predict(self, X: np.ndarray) -> np.array:
         """
-        Make prediction using learned coeficients and the intercept.
+        Make prediction using learned coefficients and the intercept.
         Use vectorized operations.
 
         Arguments

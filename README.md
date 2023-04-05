@@ -1,7 +1,7 @@
 # Kratka domača naloga 5: Regularizacija (UOZP)
 
 V tokratni domači nalogi bomo implementirali linearno regresijo z analitično rešitvijo (angl. *closed-form*).
-Primerjali bomo napovedi modela z implementacijo gradientnega sestopa iz prejšnje naloge. Kodo iz prejšnje naloge lahko prekopirate in jo nadgradite za uporabo regularizacije.
+Primerjali bomo napovedi modela z implementacijo gradientnega sestopa iz prejšnje naloge. Kodo iz prejšnje naloge lahko prekopirate in jo nadgradite z uporabo regularizacije.
 
 ---
 
@@ -22,7 +22,7 @@ Enačbo ste izpeljali na predavanjih, končno obliko pa vam podajamo tu:
 
 $y = X \cdot w$
 
-$w = (X^TX)^{-1}Xy$
+$w = (X^TX)^{-1}X^Ty$
 
 V prvem koraku implementirajte rešitev v vektorski obliki. Dodajte jo v metodo `fit` razreda `LinearRegression`. Metoda `predict` naj vrača napovedi na validacijski/testni množici.
 
@@ -30,7 +30,7 @@ V prvem koraku implementirajte rešitev v vektorski obliki. Dodajte jo v metodo 
 
 Rešitev iz prejšnjega koraka nadgradite z dodajanjem L2 regularizacijskega parametra v enačbo.
 
-$w = (X^TX + \lambda I)^{-1}Xy$
+$w = (X^TX + \lambda I)^{-1}X^Ty$
 
 Pri tem pazite, da ostane konstantni člen (angl. *intercept*) brez regularizacije. Torej vrednost uteži ne bo prispevala k višji vrednosti cenilne funkcije. 
 

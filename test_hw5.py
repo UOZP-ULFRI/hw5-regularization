@@ -3,7 +3,7 @@ import numpy as np
 import unittest
 
 
-class ArgumentTest(unittest.TestCase):
+class A_ArgumentTest(unittest.TestCase):
     def setUp(self) -> None:
         np.random.seed(0)
         self.X = np.array(
@@ -57,7 +57,7 @@ class ArgumentTest(unittest.TestCase):
         )
 
 
-class InterceptTest(unittest.TestCase):
+class B_InterceptTest(unittest.TestCase):
     def setUp(self) -> None:
         np.random.seed(0)
         self.X = np.array(
@@ -82,7 +82,7 @@ class InterceptTest(unittest.TestCase):
             10: np.array([6.40968794, 6.33450745, 6.38725879, 6.36971714]),
         }
 
-    def test_regularized_intercept_LR(self):
+    def test_110_regularized_intercept_LR(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(1)
@@ -96,7 +96,7 @@ class InterceptTest(unittest.TestCase):
                 f"Check your implementation. Seems like your intercept is regularized. Think about how to remove it from regularization."
             )
 
-    def test_regularized_intercept_LR_GD(self):
+    def test_120_regularized_intercept_LR_GD(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(1)
@@ -110,7 +110,21 @@ class InterceptTest(unittest.TestCase):
                 f"Check your implementation. Seems like your intercept is regularized. Think about how to remove it from regularization."
             )
 
-    def test_regularized_coefs_LR_GD(self):
+    def test_121_unregularized_coefs_LR_GD(self):
+        from hw5 import LinearRegressionGD
+
+        lr = LinearRegressionGD(0)
+        lr.fit(self.X, self.y)
+        coefs_noreg = lr.coefs.copy()
+
+        np.testing.assert_almost_equal(
+            coefs_noreg,
+            self.weights,
+            3,
+            f"Gradient LR seem to produce different results than expected. If close, try adjusting the threshold for convergence.",
+        )
+
+    def test_122_regularized_coefs_LR_GD(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(0)
@@ -124,24 +138,24 @@ class InterceptTest(unittest.TestCase):
         np.testing.assert_almost_equal(
             coefs_noreg,
             self.weights,
-            5,
+            3,
             f"Gradient LR seem to produce different results than expected. If close, try adjusting the threshold for convergence.",
         )
 
         if np.isclose(coefs_noreg, coefs_reg, 1e-4).sum() > 0:
             raise ValueError(
-                f"Regularized and unregularized coeficients are close. Check if your derivative is correct."
+                f"Regularized and unregularized coefficients are close. Check if your derivative is correct."
             )
 
         np.testing.assert_almost_equal(
             coefs_reg,
             self.weights_reg[1],
             5,
-            f"Regularized Gradient LR seem to produce different results than expected. If close, try adjusting the threshold for convergence or check your gradient for errors.",
+            f"Regularized Gradient LR seem to produce different results than expected. If close, try adjusting the threshold for convergence or check your gradient for errors (if completely off).",
         )
 
 
-class SimpleTest(unittest.TestCase):
+class C_SimpleTest(unittest.TestCase):
     def setUp(self) -> None:
         np.random.seed(0)
         self.X = np.array(
@@ -166,7 +180,7 @@ class SimpleTest(unittest.TestCase):
             10: np.array([6.40968794, 6.33450745, 6.38725879, 6.36971714]),
         }
 
-    def test_010_no_regularization_correct_fit(self):
+    def test_210_no_regularization_correct_fit(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(0)
@@ -178,7 +192,7 @@ class SimpleTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, self.weights, decimal=5)
         np.testing.assert_almost_equal(fit_intercept, self.intercept, decimal=5)
 
-    def test_011_no_regularization_correct_predict(self):
+    def test_211_no_regularization_correct_predict(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(0)
@@ -188,7 +202,7 @@ class SimpleTest(unittest.TestCase):
 
         np.testing.assert_almost_equal(y_pred, self.y_test, decimal=5)
 
-    def test_020_regularization_1_correct_fit(self):
+    def test_220_regularization_1_correct_fit(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(1.0)
@@ -200,7 +214,7 @@ class SimpleTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, self.weights_reg[1], decimal=5)
         np.testing.assert_almost_equal(fit_intercept, self.intercept_reg[1], decimal=5)
 
-    def test_021_regularization_1_correct_prediction(self):
+    def test_221_regularization_1_correct_prediction(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(1.0)
@@ -210,7 +224,7 @@ class SimpleTest(unittest.TestCase):
 
         np.testing.assert_almost_equal(y_pred, self.y_test_reg[1], decimal=5)
 
-    def test_030_regularization_10_correct_fit(self):
+    def test_230_regularization_10_correct_fit(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(10.0)
@@ -222,7 +236,7 @@ class SimpleTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, self.weights_reg[10], decimal=5)
         np.testing.assert_almost_equal(fit_intercept, self.intercept_reg[10], decimal=5)
 
-    def test_031_regularization_10_correct_prediction(self):
+    def test_231_regularization_10_correct_prediction(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(10.0)
@@ -232,7 +246,7 @@ class SimpleTest(unittest.TestCase):
 
         np.testing.assert_almost_equal(y_pred, self.y_test_reg[10], decimal=5)
 
-    def test_040_regularization_1e9_correct_fit(self):
+    def test_240_regularization_1e9_correct_fit(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(1e9)
@@ -244,7 +258,7 @@ class SimpleTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, np.array([0.0, 0.0]), decimal=5)
         np.testing.assert_almost_equal(fit_intercept, 6.383333332291889, decimal=5)
 
-    def test_031_regularization_1e9_correct_prediction(self):
+    def test_231_regularization_1e9_correct_prediction(self):
         from hw5 import LinearRegression
 
         lr = LinearRegression(1e9)
@@ -257,7 +271,7 @@ class SimpleTest(unittest.TestCase):
         )
 
 
-class BestLambdaParameterTest(unittest.TestCase):
+class F_BestLambdaParameterTest(unittest.TestCase):
     def setUp(self) -> None:
         self.lambdas = np.array(
             [0, 0.01, 0.05, 0.1, 0.5, 0.8, 1, 2, 3, 4, 5, 10, 20, 50, 100]
@@ -293,7 +307,7 @@ Is this expected? Why?
 
         return (X[:HALF], X[HALF:], y[:HALF], y[HALF:])
 
-    def test_010_enough_samples_no_noise(self):
+    def test_510_enough_samples_no_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 200
@@ -314,7 +328,7 @@ Is this expected? Why?
 
         self.assertEqual(best_lambda, correct_lambda)
 
-    def test_011_enough_samples_a_bit_noise(self):
+    def test_511_enough_samples_a_bit_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 200
@@ -335,7 +349,7 @@ Is this expected? Why?
 
         self.assertEqual(best_lambda, correct_lambda)
 
-    def test_012_enough_samples_some_noise(self):
+    def test_512_enough_samples_some_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 200
@@ -356,7 +370,7 @@ Is this expected? Why?
 
         self.assertEqual(best_lambda, correct_lambda)
 
-    def test_013_enough_samples_a_lot_noise(self):
+    def test_513_enough_samples_a_lot_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 200
@@ -377,7 +391,7 @@ Is this expected? Why?
 
         self.assertEqual(best_lambda, correct_lambda)
 
-    def test_020_few_samples_no_noise(self):
+    def test_520_few_samples_no_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 100
@@ -398,7 +412,7 @@ Is this expected? Why?
 
         self.assertEqual(best_lambda, correct_lambda)
 
-    def test_021_few_samples_a_bit_noise(self):
+    def test_521_few_samples_a_bit_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 100
@@ -419,7 +433,7 @@ Is this expected? Why?
 
         self.assertEqual(best_lambda, correct_lambda)
 
-    def test_022_few_samples_some_noise(self):
+    def test_522_few_samples_some_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 100
@@ -440,7 +454,7 @@ Is this expected? Why?
 
         self.assertEqual(best_lambda, correct_lambda)
 
-    def test_023_few_samples_a_lot_noise(self):
+    def test_523_few_samples_a_lot_noise(self):
         from hw5 import find_best_lambda
 
         n_samples = 100
@@ -462,8 +476,8 @@ Is this expected? Why?
         self.assertEqual(best_lambda, correct_lambda)
 
 
-class CostFunctionTest(unittest.TestCase):
-    def test_010_cost_grad_lambda_0(self):
+class D_CostFunctionTest(unittest.TestCase):
+    def test_310_cost_grad_lambda_0(self):
         from hw5 import gradient, cost
         from test_vars import X, y
 
@@ -491,7 +505,7 @@ class CostFunctionTest(unittest.TestCase):
 
         np.testing.assert_almost_equal(grad, grad_num, decimal=3)
 
-    def test_020_cost_grad_lambda_1(self):
+    def test_320_cost_grad_lambda_1(self):
         from hw5 import gradient, cost
         from test_vars import X, y
 
@@ -520,7 +534,7 @@ class CostFunctionTest(unittest.TestCase):
         np.testing.assert_almost_equal(grad, grad_num, decimal=3)
 
 
-class LinRegGDTest(unittest.TestCase):
+class E_LinRegGDTest(unittest.TestCase):
     def setUp(self) -> None:
         np.random.seed(0)
         self.X = np.array(
@@ -545,7 +559,7 @@ class LinRegGDTest(unittest.TestCase):
             10: np.array([6.40968794, 6.33450745, 6.38725879, 6.36971714]),
         }
 
-    def test_010_no_regularization_correct_fit(self):
+    def test_410_GD_no_regularization_correct_fit(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(0)
@@ -557,7 +571,7 @@ class LinRegGDTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, self.weights, decimal=5)
         np.testing.assert_almost_equal(fit_intercept, self.intercept, decimal=5)
 
-    def test_011_no_regularization_correct_predict(self):
+    def test_411_GD_no_regularization_correct_predict(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(0)
@@ -567,7 +581,7 @@ class LinRegGDTest(unittest.TestCase):
 
         np.testing.assert_almost_equal(y_pred, self.y_test, decimal=5)
 
-    def test_020_regularization_1_correct_fit(self):
+    def test_420_GD_regularization_1_correct_fit(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(1.0)
@@ -579,7 +593,7 @@ class LinRegGDTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, self.weights_reg[1], decimal=5)
         np.testing.assert_almost_equal(fit_intercept, self.intercept_reg[1], decimal=5)
 
-    def test_021_regularization_1_correct_prediction(self):
+    def test_421_GD_regularization_1_correct_prediction(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(1.0)
@@ -589,7 +603,7 @@ class LinRegGDTest(unittest.TestCase):
 
         np.testing.assert_almost_equal(y_pred, self.y_test_reg[1], decimal=5)
 
-    def test_030_regularization_10_correct_fit(self):
+    def test_430_GD_regularization_10_correct_fit(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(10.0)
@@ -601,7 +615,7 @@ class LinRegGDTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, self.weights_reg[10], decimal=5)
         np.testing.assert_almost_equal(fit_intercept, self.intercept_reg[10], decimal=5)
 
-    def test_031_regularization_10_correct_prediction(self):
+    def test_431_GD_regularization_10_correct_prediction(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(10.0)
@@ -611,7 +625,7 @@ class LinRegGDTest(unittest.TestCase):
 
         np.testing.assert_almost_equal(y_pred, self.y_test_reg[10], decimal=5)
 
-    def test_040_regularization_200_correct_fit(self):
+    def test_440_GD_regularization_200_correct_fit(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(200)
@@ -632,7 +646,7 @@ class LinRegGDTest(unittest.TestCase):
         np.testing.assert_almost_equal(fit_weights, np.array([0.0, 0.0]), decimal=1)
         np.testing.assert_almost_equal(fit_intercept, 6.383333332291889, decimal=1)
 
-    def test_041_regularization_200_correct_prediction(self):
+    def test_441_GD_regularization_200_correct_prediction(self):
         from hw5 import LinearRegressionGD
 
         lr = LinearRegressionGD(200)
